@@ -111,4 +111,26 @@ private:
     std::unordered_map<std::string, std::vector<std::vector<std::string>>> hash_map_; 
 };
 
+// 6. AGGREGATE (Vectorized)
+class AggregateExecutor : public Executor {
+public:
+    AggregateExecutor(std::unique_ptr<Executor> child, 
+                      std::vector<std::shared_ptr<Expression>> groupBys,
+                      std::vector<std::shared_ptr<Expression>> aggregates,
+                      std::shared_ptr<Table> table_schema);
+    
+    void init() override;
+    bool next(Chunk& out_chunk) override;
+
+private:
+    std::unique_ptr<Executor> child_;
+    std::vector<std::shared_ptr<Expression>> groupBys_;
+    std::vector<std::shared_ptr<Expression>> aggregates_;
+    std::shared_ptr<Table> table_schema_;
+    
+    // We compute the final grouped results during init() and store them here
+    std::vector<std::vector<std::string>> final_results_;
+    size_t current_row_ = 0;
+};
+
 } // namespace quill

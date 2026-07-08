@@ -299,4 +299,74 @@ bool HashJoinExecutor::next(Chunk& out_chunk) {
     return false; // No more data
 }
 
+// ---------------------------------------------------------
+// 6. AGGREGATE (Vectorized)
+// ---------------------------------------------------------
+AggregateExecutor::AggregateExecutor(std::unique_ptr<Executor> child, 
+                                     std::vector<std::shared_ptr<Expression>> groupBys,
+                                     std::vector<std::shared_ptr<Expression>> aggregates,
+                                     std::shared_ptr<Table> table_schema)
+    : child_(std::move(child)), groupBys_(std::move(groupBys)), 
+      aggregates_(std::move(aggregates)), table_schema_(std::move(table_schema)) {}
+
+void AggregateExecutor::init() {
+    child_->init();
+    final_results_.clear();
+    current_row_ = 0;
+
+    // The Hash Map: Key is the GROUP BY value, Value is the running SUM
+    std::unordered_map<std::string, int> hash_map;
+
+    // Figure out which column we are grouping by (e.g., user_id)
+    auto gb_ident = std::dynamic_pointer_cast<Identifier>(groupBys_[0]);
+    int gb_idx = table_schema_->getColumnIndex(gb_ident->value);
+
+    // Figure out which column we are summing (e.g., amount)
+    auto agg_func = std::dynamic_pointer_cast<FunctionCall>(aggregates_[0]);
+    auto agg_ident = std::dynamic_pointer_cast<Identifier>(agg_func->arguments[0]);
+    int agg_idx = table_schema_->getColumnIndex(agg_ident->value);
+
+    Chunk in_chunk;
+    
+    // === BUILD PHASE ===
+    // Pull chunks from the child and compute the running totals!
+    while (child_->next(in_chunk)) {
+        for (size_t r = 0; r < in_chunk.size; ++r) {
+            std::string group_key = in_chunk.columns[gb_idx][r];
+            std::string amount_str = in_chunk.columns[agg_idx][r];
+            
+            // Strip the '$' and convert to integer
+            if (!amount_str.empty() && amount_str[0] == '$') amount_str = amount_str.substr(1);
+            int amount = std::stoi(amount_str);
+
+            // Add it to our hash map accumulator
+            hash_map[group_key] += amount;
+        }
+    }
+
+    // Convert the finished hash map into a list of rows so we can output it
+    for (const auto& pair : hash_map) {
+        final_results_.push_back({pair.first, "$" + std::to_string(pair.second)});
+    }
+}
+
+bool AggregateExecutor::next(Chunk& out_chunk) {
+    // === PROBE PHASE ===
+    if (current_row_ >= final_results_.size()) return false;
+
+    size_t rows_to_fetch = std::min(BATCH_SIZE, final_results_.size() - current_row_);
+    
+    out_chunk.columns.resize(2); // One for the Group Key, One for the Sum
+    for (auto& col : out_chunk.columns) col.clear();
+    out_chunk.size = rows_to_fetch;
+
+    for (size_t i = 0; i < rows_to_fetch; ++i) {
+        out_chunk.columns[0].push_back(final_results_[current_row_ + i][0]);
+        out_chunk.columns[1].push_back(final_results_[current_row_ + i][1]);
+    }
+    
+    current_row_ += rows_to_fetch;
+    return true;
+}
+
 } // namespace quill
