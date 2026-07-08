@@ -7,23 +7,24 @@
 
 namespace quill {
 
-// The base class for all physical operators
+// How many rows we process in a single chunk
+constexpr size_t BATCH_SIZE = 100; 
+
 class Executor {
 public:
     virtual ~Executor() = default;
     
     virtual void init() = 0;
     
-    // NEW: Returns true if a row was fetched, false if no more data.
-    // The fetched data is placed inside the 'out_tuple' parameter.
-    virtual bool next(Tuple& out_tuple) = 0;
+    // NEW: Returns true if a CHUNK of rows was fetched, false if no more data.
+    virtual bool next(Chunk& out_chunk) = 0;
 };
 
 class SeqScanExecutor : public Executor {
 public:
     explicit SeqScanExecutor(std::shared_ptr<Table> table);
     void init() override;
-    bool next(Tuple& out_tuple) override;
+    bool next(Chunk& out_chunk) override;
 
 private:
     std::shared_ptr<Table> table_;
@@ -37,7 +38,7 @@ public:
                    std::shared_ptr<Table> table_schema);
     
     void init() override;
-    bool next(Tuple& out_tuple) override;
+    bool next(Chunk& out_chunk) override;
 
 private:
     std::unique_ptr<Executor> child_;
@@ -52,7 +53,7 @@ public:
                     std::shared_ptr<Table> table_schema);
     
     void init() override;
-    bool next(Tuple& out_tuple) override;
+    bool next(Chunk& out_chunk) override;
 
 private:
     std::unique_ptr<Executor> child_;
