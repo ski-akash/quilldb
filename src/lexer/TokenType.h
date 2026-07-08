@@ -23,6 +23,8 @@ enum class TokenType {
     EQUALS,     // =
     JOIN,
     ON,
+    GROUP,
+    BY,
 
     // Syntax
     COMMA,      // ,

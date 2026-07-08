@@ -91,6 +91,34 @@ std::shared_ptr<JoinClause> Parser::parseJoinClause() {
     return std::make_shared<JoinClause>(std::move(joinTable), std::move(condition));
 }
 
+// NEW: Parse either a regular column (user_id) or a function call (SUM(amount))
+std::shared_ptr<Expression> Parser::parseColumnOrFunction() {
+    std::string name = current_token_.literal;
+    nextToken(); // Advance past the name
+
+    // If the next token is a '(', this is a function call!
+    if (current_token_.type == TokenType::LPAREN) {
+        nextToken(); // Advance past '('
+        
+        std::vector<std::shared_ptr<Expression>> args;
+        
+        // Grab the argument inside the parentheses (e.g., 'amount')
+        if (current_token_.type == TokenType::IDENTIFIER || current_token_.type == TokenType::STAR) {
+            args.push_back(std::make_shared<Identifier>(current_token_.literal));
+            nextToken();
+        }
+
+        if (current_token_.type == TokenType::RPAREN) {
+            nextToken(); // Advance past ')'
+        }
+        
+        return std::make_shared<FunctionCall>(name, args);
+    }
+
+    // If there was no '(', it's just a regular column
+    return std::make_shared<Identifier>(name);
+}
+
 std::shared_ptr<SelectStatement> Parser::parseSelectStatement() {
     auto stmt = std::make_shared<SelectStatement>();
 
@@ -99,9 +127,11 @@ std::shared_ptr<SelectStatement> Parser::parseSelectStatement() {
     // Parse columns until we hit 'FROM' or EOF
     while (current_token_.type != TokenType::FROM && current_token_.type != TokenType::END_OF_FILE) {
         if (current_token_.type == TokenType::IDENTIFIER) {
-            stmt->columns.push_back(std::make_shared<Identifier>(current_token_.literal));
+            // NEW: Use our smart helper method
+            stmt->columns.push_back(parseColumnOrFunction());
+        } else {
+            nextToken(); // Move past commas
         }
-        nextToken();
     }
 
     // Parse the main table name
@@ -112,20 +142,34 @@ std::shared_ptr<SelectStatement> Parser::parseSelectStatement() {
     }
     nextToken(); // Advance past the table name
 
-    // NEW: Check for JOIN clauses (loop in case there are multiple!)
+    // Check for JOIN clauses
     while (currentTokenIs(TokenType::JOIN)) {
         stmt->joins.push_back(parseJoinClause());
-        // parseJoinClause leaves us sitting on the token *after* the ON condition
-        // so we don't need to call nextToken() here.
         nextToken(); 
     }
 
     // Check if there is a WHERE clause
     if (currentTokenIs(TokenType::WHERE)) {
-        nextToken(); // Move past 'WHERE' keyword
+        nextToken(); // Move past 'WHERE'
         stmt->whereClause = parseExpression();
     }
     
+    // NEW: Check if there is a GROUP BY clause
+    if (currentTokenIs(TokenType::GROUP)) {
+        nextToken(); // Move past 'GROUP'
+        if (currentTokenIs(TokenType::BY)) {
+            nextToken(); // Move past 'BY'
+
+            // Parse the grouping columns until the query ends
+            while (current_token_.type != TokenType::SEMICOLON && current_token_.type != TokenType::END_OF_FILE) {
+                if (current_token_.type == TokenType::IDENTIFIER) {
+                    stmt->groupBy.push_back(std::make_shared<Identifier>(current_token_.literal));
+                }
+                nextToken();
+            }
+        }
+    }
+
     if (peekTokenIs(TokenType::SEMICOLON) || currentTokenIs(TokenType::SEMICOLON)) {
         if (peekTokenIs(TokenType::SEMICOLON)) nextToken();
     }

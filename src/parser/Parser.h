@@ -32,6 +32,9 @@ private:
     
     // NEW: Parses JOIN ... ON ...
     std::shared_ptr<JoinClause> parseJoinClause();
+
+    // NEW: Determines if a token is a standard column or a function call
+    std::shared_ptr<Expression> parseColumnOrFunction();
     
     // Helper methods to check token types safely
     bool currentTokenIs(TokenType type) const;

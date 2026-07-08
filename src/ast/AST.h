@@ -84,16 +84,36 @@ public:
     }
 };
 
+// NEW: Represents an aggregate function like SUM(amount) or COUNT(id)
+class FunctionCall : public Expression {
+public:
+    std::string functionName; // e.g., "SUM"
+    std::vector<std::shared_ptr<Expression>> arguments; // e.g., [amount]
+
+    FunctionCall(std::string name, std::vector<std::shared_ptr<Expression>> args)
+        : functionName(std::move(name)), arguments(std::move(args)) {}
+
+    std::string toString() const override {
+        std::string result = functionName + "(";
+        for (size_t i = 0; i < arguments.size(); ++i) {
+            result += arguments[i]->toString();
+            if (i < arguments.size() - 1) result += ", ";
+        }
+        result += ")";
+        return result;
+    }
+};
+
 // Represents a full SELECT query
 class SelectStatement : public Statement {
 public:
     std::vector<std::shared_ptr<Expression>> columns;
     std::string tableName;
-    
-    // NEW: A query can have multiple joins
     std::vector<std::shared_ptr<JoinClause>> joins;
-    
     std::shared_ptr<Expression> whereClause = nullptr;
+    
+    // NEW: Columns to group by (e.g., GROUP BY user_id)
+    std::vector<std::shared_ptr<Expression>> groupBy;
 
     std::string toString() const override {
         std::string result = "SELECT [ ";
@@ -103,7 +123,6 @@ public:
         }
         result += " ] FROM " + tableName;
         
-        // NEW: Print joins if they exist
         for (const auto& join : joins) {
             result += " " + join->toString();
         }
@@ -112,8 +131,18 @@ public:
             result += " WHERE " + whereClause->toString();
         }
         
+        // NEW: Print GROUP BY if it exists
+        if (!groupBy.empty()) {
+            result += " GROUP BY [ ";
+            for (size_t i = 0; i < groupBy.size(); ++i) {
+                result += groupBy[i]->toString();
+                if (i < groupBy.size() - 1) result += ", ";
+            }
+            result += " ]";
+        }
+        
         return result;
     }
-}; 
+};
 
 }

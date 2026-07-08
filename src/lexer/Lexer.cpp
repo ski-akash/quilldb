@@ -59,10 +59,12 @@ TokenType Lexer::lookupIdentifier(const std::string& ident) {
     if (upper_ident == "SELECT") return TokenType::SELECT;
     if (upper_ident == "FROM") return TokenType::FROM;
     if (upper_ident == "WHERE") return TokenType::WHERE;
-    
-    // NEW KEYWORDS
     if (upper_ident == "JOIN") return TokenType::JOIN;
     if (upper_ident == "ON") return TokenType::ON;
+    
+    // NEW KEYWORDS
+    if (upper_ident == "GROUP") return TokenType::GROUP;
+    if (upper_ident == "BY") return TokenType::BY;
     
     return TokenType::IDENTIFIER;
 }
