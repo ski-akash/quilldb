@@ -4,6 +4,7 @@
 #include "storage/Storage.h"
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 namespace quill {
 
@@ -83,6 +84,31 @@ private:
     
     // We "materialize" the right table's chunks into memory during init()
     std::vector<Chunk> right_materialized_; 
+};
+
+// 5. HASH JOIN (Vectorized)
+class HashJoinExecutor : public Executor {
+public:
+    HashJoinExecutor(std::unique_ptr<Executor> left, 
+                     std::unique_ptr<Executor> right, 
+                     std::shared_ptr<Expression> predicate,
+                     std::shared_ptr<Table> left_schema,
+                     std::shared_ptr<Table> right_schema);
+    
+    void init() override;
+    bool next(Chunk& out_chunk) override;
+
+private:
+    std::unique_ptr<Executor> left_child_;
+    std::unique_ptr<Executor> right_child_;
+    std::shared_ptr<Expression> predicate_;
+    
+    std::shared_ptr<Table> left_schema_;
+    std::shared_ptr<Table> right_schema_;
+    
+    // THE HASH MAP: Key is the string value of the join column. 
+    // Value is a list of rows (each row is a vector of strings).
+    std::unordered_map<std::string, std::vector<std::vector<std::string>>> hash_map_; 
 };
 
 } // namespace quill

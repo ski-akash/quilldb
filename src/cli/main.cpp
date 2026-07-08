@@ -34,15 +34,13 @@ int main() {
     auto left_scan = std::make_unique<quill::SeqScanExecutor>(users_table);
     auto right_scan = std::make_unique<quill::SeqScanExecutor>(orders_table);
     
-    // Notice how the Join takes BOTH scans!
-    auto join = std::make_unique<quill::NestedLoopJoinExecutor>(
+    // NEW: We are now using a Hash Join!
+    auto join = std::make_unique<quill::HashJoinExecutor>(
         std::move(left_scan), std::move(right_scan), 
         selectStmt->joins[0]->condition, 
         users_table, orders_table
     );
     
-    // Wrap the Join in a Filter
-    // Note: To keep the C++ simple, our basic filter uses the users schema to find "id = 42"
     auto filter = std::make_unique<quill::FilterExecutor>(std::move(join), selectStmt->whereClause, users_table);
 
     // 5. EXECUTE!

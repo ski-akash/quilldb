@@ -209,4 +209,94 @@ bool NestedLoopJoinExecutor::next(Chunk& out_chunk) {
     return false; // No more data
 }
 
+// ---------------------------------------------------------
+// 5. HASH JOIN (Vectorized)
+// ---------------------------------------------------------
+HashJoinExecutor::HashJoinExecutor(std::unique_ptr<Executor> left, 
+                                   std::unique_ptr<Executor> right, 
+                                   std::shared_ptr<Expression> predicate,
+                                   std::shared_ptr<Table> left_schema,
+                                   std::shared_ptr<Table> right_schema)
+    : left_child_(std::move(left)), right_child_(std::move(right)), 
+      predicate_(std::move(predicate)), 
+      left_schema_(std::move(left_schema)), right_schema_(std::move(right_schema)) {}
+
+void HashJoinExecutor::init() {
+    left_child_->init();
+    right_child_->init();
+    
+    hash_map_.clear();
+
+    // Parse the ON condition to figure out which column from the right table we are hashing
+    auto binary_expr = std::dynamic_pointer_cast<BinaryExpression>(predicate_);
+    auto right_ident = std::dynamic_pointer_cast<Identifier>(binary_expr->right);
+    std::string right_col_name = right_ident->value.substr(right_ident->value.find('.') + 1);
+    int r_col_idx = right_schema_->getColumnIndex(right_col_name);
+
+    // === BUILD PHASE ===
+    // Read the entire right table and build the hash map
+    Chunk right_chunk;
+    while (right_child_->next(right_chunk)) {
+        for (size_t r = 0; r < right_chunk.size; ++r) {
+            std::string key = right_chunk.columns[r_col_idx][r];
+            
+            // Extract the row into a simple vector to store in our map
+            std::vector<std::string> row;
+            for (size_t c = 0; c < right_chunk.columns.size(); ++c) {
+                row.push_back(right_chunk.columns[c][r]);
+            }
+            
+            hash_map_[key].push_back(std::move(row));
+        }
+    }
+}
+
+bool HashJoinExecutor::next(Chunk& out_chunk) {
+    Chunk left_chunk;
+    
+    // === PROBE PHASE ===
+    // Pull a batch of rows from the left table
+    if (left_child_->next(left_chunk)) {
+        
+        size_t total_cols = left_schema_->column_names.size() + right_schema_->column_names.size();
+        out_chunk.columns.resize(total_cols);
+        for (auto& col : out_chunk.columns) col.clear();
+        out_chunk.size = 0;
+
+        // Parse the ON condition for the left table's column
+        auto binary_expr = std::dynamic_pointer_cast<BinaryExpression>(predicate_);
+        auto left_ident = std::dynamic_pointer_cast<Identifier>(binary_expr->left);
+        std::string left_col_name = left_ident->value.substr(left_ident->value.find('.') + 1);
+        int l_col_idx = left_schema_->getColumnIndex(left_col_name);
+        
+        // Scan the left chunk and do an O(1) hash map lookup for every row
+        for (size_t l_row = 0; l_row < left_chunk.size; ++l_row) {
+            std::string key = left_chunk.columns[l_col_idx][l_row];
+            
+            // Did we find a match in the hash map?
+            if (hash_map_.find(key) != hash_map_.end()) {
+                
+                // Yes! There might be multiple matching right rows for this one left row
+                for (const auto& right_row : hash_map_[key]) {
+                    
+                    // Copy left columns
+                    for (size_t c = 0; c < left_chunk.columns.size(); ++c) {
+                        out_chunk.columns[c].push_back(left_chunk.columns[c][l_row]);
+                    }
+                    
+                    // Copy right columns
+                    for (size_t c = 0; c < right_row.size(); ++c) {
+                        out_chunk.columns[left_chunk.columns.size() + c].push_back(right_row[c]);
+                    }
+                    out_chunk.size++;
+                }
+            }
+        }
+        
+        if (out_chunk.size > 0) return true;
+    }
+    
+    return false; // No more data
+}
+
 } // namespace quill

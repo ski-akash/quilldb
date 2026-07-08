@@ -4,11 +4,13 @@
 CMakeFiles/quilldb.dir/src/cli/main.cpp.obj
  D:/quilldb/src/cli/main.cpp
  D:/quilldb/src/ast/AST.h
+ D:/quilldb/src/executor/Executor.h
  D:/quilldb/src/lexer/Lexer.h
  D:/quilldb/src/lexer/TokenType.h
  D:/quilldb/src/parser/Parser.h
  D:/quilldb/src/planner/LogicalPlan.h
  D:/quilldb/src/planner/Planner.h
+ D:/quilldb/src/storage/Storage.h
  c:/mingw/include/_mingw.h
  c:/mingw/include/ctype.h
  c:/mingw/include/errno.h
