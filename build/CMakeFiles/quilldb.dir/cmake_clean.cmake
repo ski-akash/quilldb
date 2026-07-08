@@ -1,0 +1,15 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj"
+  "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj.d"
+  "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj"
+  "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj.d"
+  "libquilldb.dll.a"
+  "quilldb.exe"
+  "quilldb.exe.manifest"
+  "quilldb.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/quilldb.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
