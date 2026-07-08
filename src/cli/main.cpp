@@ -1,38 +1,29 @@
 #include "lexer/Lexer.h"
+#include "parser/Parser.h"
 #include <iostream>
 #include <vector>
 
-std::string tokenTypeToString(quill::TokenType type) {
-    switch (type) {
-        case quill::TokenType::SELECT: return "SELECT";
-        case quill::TokenType::FROM: return "FROM";
-        case quill::TokenType::WHERE: return "WHERE";
-        case quill::TokenType::IDENTIFIER: return "IDENTIFIER";
-        case quill::TokenType::NUMBER: return "NUMBER";
-        case quill::TokenType::EQUALS: return "EQUALS";
-        case quill::TokenType::SEMICOLON: return "SEMICOLON";
-        case quill::TokenType::LPAREN: return "LPAREN";
-        case quill::TokenType::RPAREN: return "RPAREN";
-        case quill::TokenType::COMMA: return "COMMA";
-        case quill::TokenType::STAR: return "STAR";
-        case quill::TokenType::END_OF_FILE: return "EOF";
-        case quill::TokenType::ILLEGAL: return "ILLEGAL";
-        default: return "UNKNOWN";
-    }
-}
-
 int main() {
-    std::cout << "--- QuillDB Lexer Test ---" << std::endl;
+    std::cout << "--- QuillDB Parser Test ---" << std::endl;
 
-    // A real SQL string to test our multi-character logic
-    std::string sql = "SELECT id, name FROM users WHERE id = 42;"; 
+    // A real SQL string to test our AST generation
+    std::string sql = "SELECT id, name, email FROM users;"; 
+    std::cout << "Raw Query: " << sql << "\n\n";
     
+    // 1. Lexical Analysis
     quill::Lexer lexer(sql);
-    std::vector<quill::Token> tokens = lexer.tokenize();
+    
+    // 2. Parsing (Syntax Analysis)
+    // We use std::move because the Parser takes ownership of the Lexer
+    quill::Parser parser(std::move(lexer));
+    
+    // Generate the AST
+    std::vector<std::shared_ptr<quill::Statement>> statements = parser.parse();
 
-    for (const auto& token : tokens) {
-        std::cout << "Token: [" << tokenTypeToString(token.type) 
-                  << "] \tLiteral: '" << token.literal << "'" << std::endl;
+    // 3. Output the AST
+    for (const auto& stmt : statements) {
+        std::cout << "Generated AST Node:\n";
+        std::cout << stmt->toString() << std::endl;
     }
 
     return 0;

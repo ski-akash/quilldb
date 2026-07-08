@@ -13,6 +13,7 @@ add_compile_options(-Wall -Wextra -Wpedantic)
 set(SOURCES
     src/cli/main.cpp
     src/lexer/Lexer.cpp
+    src/parser/Parser.cpp
 )
 
 # Create the executable
