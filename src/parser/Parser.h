@@ -30,6 +30,9 @@ private:
     // NEW: Parses things like "id = 42"
     std::shared_ptr<Expression> parseExpression();
     
+    // NEW: Parses JOIN ... ON ...
+    std::shared_ptr<JoinClause> parseJoinClause();
+    
     // Helper methods to check token types safely
     bool currentTokenIs(TokenType type) const;
     bool peekTokenIs(TokenType type) const;

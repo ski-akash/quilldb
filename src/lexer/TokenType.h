@@ -21,13 +21,15 @@ enum class TokenType {
     STAR,       // *
     SLASH,      // /
     EQUALS,     // =
+    JOIN,
+    ON,
 
     // Syntax
     COMMA,      // ,
     SEMICOLON,  // ;
     LPAREN,     // (
     RPAREN,     // )
-
+    
     // Special
     END_OF_FILE,
     ILLEGAL

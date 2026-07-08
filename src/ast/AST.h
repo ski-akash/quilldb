@@ -70,13 +70,29 @@ public:
     }
 };
 
+// NEW: Represents a JOIN ... ON ... clause
+class JoinClause : public Node {
+public:
+    std::string tableName;
+    std::shared_ptr<Expression> condition; // e.g., users.id = orders.user_id
+
+    JoinClause(std::string table, std::shared_ptr<Expression> cond)
+        : tableName(std::move(table)), condition(std::move(cond)) {}
+
+    std::string toString() const override {
+        return "JOIN " + tableName + " ON " + condition->toString();
+    }
+};
+
 // Represents a full SELECT query
 class SelectStatement : public Statement {
 public:
     std::vector<std::shared_ptr<Expression>> columns;
     std::string tableName;
     
-    // NEW: Optional WHERE clause
+    // NEW: A query can have multiple joins
+    std::vector<std::shared_ptr<JoinClause>> joins;
+    
     std::shared_ptr<Expression> whereClause = nullptr;
 
     std::string toString() const override {
@@ -87,13 +103,17 @@ public:
         }
         result += " ] FROM " + tableName;
         
-        // Append WHERE clause output if it exists
+        // NEW: Print joins if they exist
+        for (const auto& join : joins) {
+            result += " " + join->toString();
+        }
+        
         if (whereClause != nullptr) {
             result += " WHERE " + whereClause->toString();
         }
         
         return result;
     }
-};
+}; 
 
 }

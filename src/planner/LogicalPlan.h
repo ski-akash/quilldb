@@ -61,4 +61,21 @@ public:
     }
 };
 
+// 4. NESTED LOOP JOIN: Combines two data sources based on a condition
+class NestedLoopJoinNode : public PlanNode {
+public:
+    std::shared_ptr<PlanNode> left_child;  // The main table (e.g., users)
+    std::shared_ptr<PlanNode> right_child; // The joined table (e.g., orders)
+    std::shared_ptr<Expression> predicate; // The ON condition (e.g., users.id = orders.user_id)
+
+    NestedLoopJoinNode(std::shared_ptr<PlanNode> left, 
+                       std::shared_ptr<PlanNode> right, 
+                       std::shared_ptr<Expression> pred)
+        : left_child(std::move(left)), right_child(std::move(right)), predicate(std::move(pred)) {}
+
+    std::string toString() const override {
+        return "NestedLoopJoin(ON " + predicate->toString() + ")\n  -> Left: " + left_child->toString() + "\n  -> Right: " + right_child->toString();
+    }
+};
+
 } // namespace quill

@@ -14,18 +14,24 @@ std::shared_ptr<PlanNode> Planner::createPlan(const std::shared_ptr<Statement>& 
 }
 
 std::shared_ptr<PlanNode> Planner::planSelect(const std::shared_ptr<SelectStatement>& stmt) {
-    // 1. SCAN: The bottom of our pipeline is always reading the table
+    // 1. SCAN: The bottom of our pipeline starts with the main table
     std::shared_ptr<PlanNode> root = std::make_shared<SeqScanNode>(stmt->tableName);
 
-    // 2. FILTER: If there is a WHERE clause, wrap the SCAN in a FILTER
+    // 2. JOIN: If there are joins, wrap the current root and a scan of the joined table
+    for (const auto& join : stmt->joins) {
+        auto right_scan = std::make_shared<SeqScanNode>(join->tableName);
+        root = std::make_shared<NestedLoopJoinNode>(root, right_scan, join->condition);
+    }
+
+    // 3. FILTER: If there is a WHERE clause, wrap the tree in a FILTER
     if (stmt->whereClause != nullptr) {
         root = std::make_shared<FilterNode>(root, stmt->whereClause);
     }
 
-    // 3. PROJECT: Wrap everything in a PROJECT to return only the requested columns
+    // 4. PROJECT: Wrap everything in a PROJECT to return only the requested columns
     root = std::make_shared<ProjectNode>(root, stmt->columns);
 
-    return root; // Return the top of the tree
+    return root; 
 }
 
 } // namespace quill

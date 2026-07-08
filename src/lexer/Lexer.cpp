@@ -26,10 +26,10 @@ void Lexer::skipWhitespace() {
 }
 
 bool Lexer::isLetter(char ch) {
-    // We include '_' so we can handle table names like 'user_data'
+    // We include '_' and '.' so we can handle 'users.id'
     return (ch >= 'a' && ch <= 'z') || 
            (ch >= 'A' && ch <= 'Z') || 
-           ch == '_';
+           ch == '_' || ch == '.';
 }
 
 bool Lexer::isDigit(char ch) {
@@ -53,17 +53,17 @@ std::string Lexer::readNumber() {
 }
 
 TokenType Lexer::lookupIdentifier(const std::string& ident) {
-    // Convert to uppercase for case-insensitive keyword matching
     std::string upper_ident = ident;
-    for (char& c : upper_ident) {
-        c = std::toupper(c);
-    }
+    for (char& c : upper_ident) c = std::toupper(c);
     
     if (upper_ident == "SELECT") return TokenType::SELECT;
     if (upper_ident == "FROM") return TokenType::FROM;
     if (upper_ident == "WHERE") return TokenType::WHERE;
     
-    // If it's not a keyword, it's a standard identifier (like a table or column name)
+    // NEW KEYWORDS
+    if (upper_ident == "JOIN") return TokenType::JOIN;
+    if (upper_ident == "ON") return TokenType::ON;
+    
     return TokenType::IDENTIFIER;
 }
 
