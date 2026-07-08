@@ -6,6 +6,8 @@ CMakeFiles/quilldb.dir/src/cli/main.cpp.obj: D:/quilldb/src/cli/main.cpp \
   D:/quilldb/src/lexer/Lexer.h \
   D:/quilldb/src/lexer/TokenType.h \
   D:/quilldb/src/parser/Parser.h \
+  D:/quilldb/src/planner/LogicalPlan.h \
+  D:/quilldb/src/planner/Planner.h \
   c:/mingw/include/_mingw.h \
   c:/mingw/include/ctype.h \
   c:/mingw/include/errno.h \
@@ -557,6 +559,10 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/char_traits.h:
 
 D:/quilldb/src/cli/main.cpp:
 
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cerrno:
+
+D:/quilldb/src/planner/Planner.h:
+
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/ptr_traits.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/exception_defines.h:
@@ -572,6 +578,8 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/ostream:
 D:/quilldb/src/ast/AST.h:
 
 c:/mingw/include/_mingw.h:
+
+D:/quilldb/src/planner/LogicalPlan.h:
 
 D:/quilldb/src/lexer/Lexer.h:
 
@@ -733,10 +741,6 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/uses_allocator.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cctype:
 
-D:/quilldb/src/planner/Planner.h:
-
-c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cerrno:
-
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/clocale:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cstdint:
@@ -820,8 +824,6 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/stdint.h:
 D:/quilldb/src/executor/Executor.cpp:
 
 D:/quilldb/src/executor/Executor.h:
-
-D:/quilldb/src/planner/LogicalPlan.h:
 
 D:/quilldb/src/storage/Storage.h:
 

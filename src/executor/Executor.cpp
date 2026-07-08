@@ -121,4 +121,92 @@ bool ProjectExecutor::next(Chunk& out_chunk) {
     return false;
 }
 
+// ---------------------------------------------------------
+// 4. NESTED LOOP JOIN (Vectorized)
+// ---------------------------------------------------------
+NestedLoopJoinExecutor::NestedLoopJoinExecutor(std::unique_ptr<Executor> left, 
+                                               std::unique_ptr<Executor> right, 
+                                               std::shared_ptr<Expression> predicate,
+                                               std::shared_ptr<Table> left_schema,
+                                               std::shared_ptr<Table> right_schema)
+    : left_child_(std::move(left)), right_child_(std::move(right)), 
+      predicate_(std::move(predicate)), 
+      left_schema_(std::move(left_schema)), right_schema_(std::move(right_schema)) {}
+
+void NestedLoopJoinExecutor::init() {
+    left_child_->init();
+    right_child_->init();
+    
+    // Materialize the entire right child into memory once
+    right_materialized_.clear();
+    Chunk right_chunk;
+    while (right_child_->next(right_chunk)) {
+        right_materialized_.push_back(right_chunk);
+    }
+}
+
+bool NestedLoopJoinExecutor::next(Chunk& out_chunk) {
+    Chunk left_chunk;
+    
+    // Pull a batch of rows from the left table
+    if (left_child_->next(left_chunk)) {
+        
+        // Prepare the output chunk size (Left columns + Right columns)
+        size_t total_cols = left_schema_->column_names.size() + right_schema_->column_names.size();
+        out_chunk.columns.resize(total_cols);
+        for (auto& col : out_chunk.columns) col.clear();
+        out_chunk.size = 0;
+
+        // Parse the ON condition (e.g., users.id = orders.user_id)
+        auto binary_expr = std::dynamic_pointer_cast<BinaryExpression>(predicate_);
+        if (!binary_expr || binary_expr->op != "=") return false;
+
+        auto left_ident = std::dynamic_pointer_cast<Identifier>(binary_expr->left);
+        auto right_ident = std::dynamic_pointer_cast<Identifier>(binary_expr->right);
+        if (!left_ident || !right_ident) return false;
+
+        // Strip the table names (e.g., "users.id" -> "id") for lookup
+        std::string left_col_name = left_ident->value.substr(left_ident->value.find('.') + 1);
+        std::string right_col_name = right_ident->value.substr(right_ident->value.find('.') + 1);
+
+        int l_col_idx = left_schema_->getColumnIndex(left_col_name);
+        int r_col_idx = right_schema_->getColumnIndex(right_col_name);
+        
+        if (l_col_idx == -1 || r_col_idx == -1) return false;
+
+        // THE VECTORIZED NESTED LOOP
+        // 1. Loop through every row in the current Left chunk
+        for (size_t l_row = 0; l_row < left_chunk.size; ++l_row) {
+            
+            // 2. Loop through every materialized Right chunk
+            for (const auto& right_chunk : right_materialized_) {
+                
+                // 3. Loop through every row in the current Right chunk
+                for (size_t r_row = 0; r_row < right_chunk.size; ++r_row) {
+                    
+                    // Do they match?
+                    if (left_chunk.columns[l_col_idx][l_row] == right_chunk.columns[r_col_idx][r_row]) {
+                        
+                        // YES! Copy the left columns into the output
+                        for (size_t c = 0; c < left_chunk.columns.size(); ++c) {
+                            out_chunk.columns[c].push_back(left_chunk.columns[c][l_row]);
+                        }
+                        
+                        // And copy the right columns into the output
+                        for (size_t c = 0; c < right_chunk.columns.size(); ++c) {
+                            out_chunk.columns[left_chunk.columns.size() + c].push_back(right_chunk.columns[c][r_row]);
+                        }
+                        out_chunk.size++;
+                    }
+                }
+            }
+        }
+        
+        // If we found matches, return true to pass the chunk up the pipeline!
+        if (out_chunk.size > 0) return true;
+    }
+    
+    return false; // No more data
+}
+
 } // namespace quill

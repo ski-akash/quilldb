@@ -61,4 +61,28 @@ private:
     std::shared_ptr<Table> table_schema_;
 };
 
+// 4. NESTED LOOP JOIN (Vectorized)
+class NestedLoopJoinExecutor : public Executor {
+public:
+    NestedLoopJoinExecutor(std::unique_ptr<Executor> left, 
+                           std::unique_ptr<Executor> right, 
+                           std::shared_ptr<Expression> predicate,
+                           std::shared_ptr<Table> left_schema,
+                           std::shared_ptr<Table> right_schema);
+    
+    void init() override;
+    bool next(Chunk& out_chunk) override;
+
+private:
+    std::unique_ptr<Executor> left_child_;
+    std::unique_ptr<Executor> right_child_;
+    std::shared_ptr<Expression> predicate_;
+    
+    std::shared_ptr<Table> left_schema_;
+    std::shared_ptr<Table> right_schema_;
+    
+    // We "materialize" the right table's chunks into memory during init()
+    std::vector<Chunk> right_materialized_; 
+};
+
 } // namespace quill

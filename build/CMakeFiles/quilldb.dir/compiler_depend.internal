@@ -7,6 +7,8 @@ CMakeFiles/quilldb.dir/src/cli/main.cpp.obj
  D:/quilldb/src/lexer/Lexer.h
  D:/quilldb/src/lexer/TokenType.h
  D:/quilldb/src/parser/Parser.h
+ D:/quilldb/src/planner/LogicalPlan.h
+ D:/quilldb/src/planner/Planner.h
  c:/mingw/include/_mingw.h
  c:/mingw/include/ctype.h
  c:/mingw/include/errno.h

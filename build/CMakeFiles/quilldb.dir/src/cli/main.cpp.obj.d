@@ -102,6 +102,7 @@ CMakeFiles/quilldb.dir/src/cli/main.cpp.obj: D:\quilldb\src\cli\main.cpp \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\atomic_base.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\backward\auto_ptr.h \
  D:/quilldb/src/planner/Planner.h D:/quilldb/src/planner/LogicalPlan.h \
+ D:/quilldb/src/executor/Executor.h D:/quilldb/src/storage/Storage.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iostream \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ostream \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\ios \
