@@ -26,6 +26,9 @@ private:
     // Parsing functions for specific parts of the SQL grammar
     std::shared_ptr<Statement> parseStatement();
     std::shared_ptr<SelectStatement> parseSelectStatement();
+
+    // NEW: Parses things like "id = 42"
+    std::shared_ptr<Expression> parseExpression();
     
     // Helper methods to check token types safely
     bool currentTokenIs(TokenType type) const;
