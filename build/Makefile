@@ -152,6 +152,30 @@ src/cli/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/cli/main.cpp.s
 .PHONY : src/cli/main.cpp.s
 
+src/executor/Executor.obj: src/executor/Executor.cpp.obj
+.PHONY : src/executor/Executor.obj
+
+# target to build an object file
+src/executor/Executor.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/executor/Executor.cpp.obj
+.PHONY : src/executor/Executor.cpp.obj
+
+src/executor/Executor.i: src/executor/Executor.cpp.i
+.PHONY : src/executor/Executor.i
+
+# target to preprocess a source file
+src/executor/Executor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/executor/Executor.cpp.i
+.PHONY : src/executor/Executor.cpp.i
+
+src/executor/Executor.s: src/executor/Executor.cpp.s
+.PHONY : src/executor/Executor.s
+
+# target to generate assembly for a file
+src/executor/Executor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/executor/Executor.cpp.s
+.PHONY : src/executor/Executor.cpp.s
+
 src/lexer/Lexer.obj: src/lexer/Lexer.cpp.obj
 .PHONY : src/lexer/Lexer.obj
 
@@ -236,6 +260,9 @@ help:
 	@echo ... src/cli/main.obj
 	@echo ... src/cli/main.i
 	@echo ... src/cli/main.s
+	@echo ... src/executor/Executor.obj
+	@echo ... src/executor/Executor.i
+	@echo ... src/executor/Executor.s
 	@echo ... src/lexer/Lexer.obj
 	@echo ... src/lexer/Lexer.i
 	@echo ... src/lexer/Lexer.s

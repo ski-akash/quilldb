@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj"
   "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj.d"
+  "CMakeFiles/quilldb.dir/src/executor/Executor.cpp.obj"
+  "CMakeFiles/quilldb.dir/src/executor/Executor.cpp.obj.d"
   "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj"
   "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj.d"
   "CMakeFiles/quilldb.dir/src/parser/Parser.cpp.obj"
