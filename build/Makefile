@@ -200,6 +200,30 @@ src/parser/Parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/parser/Parser.cpp.s
 .PHONY : src/parser/Parser.cpp.s
 
+src/planner/Planner.obj: src/planner/Planner.cpp.obj
+.PHONY : src/planner/Planner.obj
+
+# target to build an object file
+src/planner/Planner.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/planner/Planner.cpp.obj
+.PHONY : src/planner/Planner.cpp.obj
+
+src/planner/Planner.i: src/planner/Planner.cpp.i
+.PHONY : src/planner/Planner.i
+
+# target to preprocess a source file
+src/planner/Planner.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/planner/Planner.cpp.i
+.PHONY : src/planner/Planner.cpp.i
+
+src/planner/Planner.s: src/planner/Planner.cpp.s
+.PHONY : src/planner/Planner.s
+
+# target to generate assembly for a file
+src/planner/Planner.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/planner/Planner.cpp.s
+.PHONY : src/planner/Planner.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -218,6 +242,9 @@ help:
 	@echo ... src/parser/Parser.obj
 	@echo ... src/parser/Parser.i
 	@echo ... src/parser/Parser.s
+	@echo ... src/planner/Planner.obj
+	@echo ... src/planner/Planner.i
+	@echo ... src/planner/Planner.s
 .PHONY : help
 
 

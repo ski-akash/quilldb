@@ -84,12 +84,12 @@ clean: CMakeFiles/quilldb.dir/clean
 CMakeFiles/quilldb.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\quilldb\build\CMakeFiles --progress-num=1,2,3,4 "Built target quilldb"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\quilldb\build\CMakeFiles --progress-num=1,2,3,4,5 "Built target quilldb"
 .PHONY : CMakeFiles/quilldb.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/quilldb.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\quilldb\build\CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\quilldb\build\CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/quilldb.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\quilldb\build\CMakeFiles 0
 .PHONY : CMakeFiles/quilldb.dir/rule
@@ -101,7 +101,7 @@ quilldb: CMakeFiles/quilldb.dir/rule
 # codegen rule for target.
 CMakeFiles/quilldb.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\quilldb\build\CMakeFiles --progress-num=1,2,3,4 "Finished codegen for target quilldb"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\quilldb\build\CMakeFiles --progress-num=1,2,3,4,5 "Finished codegen for target quilldb"
 .PHONY : CMakeFiles/quilldb.dir/codegen
 
 # clean rule for target.

@@ -14,6 +14,7 @@ set(SOURCES
     src/cli/main.cpp
     src/lexer/Lexer.cpp
     src/parser/Parser.cpp
+    src/planner/Planner.cpp
 )
 
 # Create the executable
