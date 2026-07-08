@@ -3,13 +3,9 @@
 
 CMakeFiles/quilldb.dir/src/cli/main.cpp.obj: D:/quilldb/src/cli/main.cpp \
   D:/quilldb/src/ast/AST.h \
-  D:/quilldb/src/executor/Executor.h \
   D:/quilldb/src/lexer/Lexer.h \
   D:/quilldb/src/lexer/TokenType.h \
   D:/quilldb/src/parser/Parser.h \
-  D:/quilldb/src/planner/LogicalPlan.h \
-  D:/quilldb/src/planner/Planner.h \
-  D:/quilldb/src/storage/Storage.h \
   c:/mingw/include/_mingw.h \
   c:/mingw/include/ctype.h \
   c:/mingw/include/errno.h \
@@ -45,8 +41,6 @@ CMakeFiles/quilldb.dir/src/cli/main.cpp.obj: D:/quilldb/src/cli/main.cpp \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/functexcept.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/functional_hash.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hash_bytes.h \
-  c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hashtable.h \
-  c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hashtable_policy.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/ios_base.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/istream.tcc \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/locale_classes.h \
@@ -83,7 +77,6 @@ CMakeFiles/quilldb.dir/src/cli/main.cpp.obj: D:/quilldb/src/cli/main.cpp \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/streambuf_iterator.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stringfwd.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/unique_ptr.h \
-  c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/unordered_map.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/uses_allocator.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/vector.tcc \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cctype \
@@ -132,7 +125,6 @@ CMakeFiles/quilldb.dir/src/cli/main.cpp.obj: D:/quilldb/src/cli/main.cpp \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/tuple \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/type_traits \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/typeinfo \
-  c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/unordered_map \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/utility \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/vector \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/stdarg.h \
@@ -569,12 +561,6 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/char_traits.h:
 
 D:/quilldb/src/cli/main.cpp:
 
-D:/quilldb/src/executor/Executor.h:
-
-c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cerrno:
-
-D:/quilldb/src/planner/Planner.h:
-
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/ptr_traits.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/exception_defines.h:
@@ -589,7 +575,7 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/ostream:
 
 D:/quilldb/src/ast/AST.h:
 
-D:/quilldb/src/planner/LogicalPlan.h:
+c:/mingw/include/_mingw.h:
 
 D:/quilldb/src/lexer/Lexer.h:
 
@@ -598,12 +584,6 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/typeinfo:
 D:/quilldb/src/lexer/TokenType.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/istream.tcc:
-
-c:/mingw/include/sys/types.h:
-
-D:/quilldb/src/storage/Storage.h:
-
-c:/mingw/include/_mingw.h:
 
 c:/mingw/include/ctype.h:
 
@@ -627,13 +607,13 @@ c:/mingw/include/stdint.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/memoryfwd.h:
 
-c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hashtable.h:
-
 c:/mingw/include/stdio.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/localefwd.h:
 
 c:/mingw/include/stdlib.h:
+
+c:/mingw/include/sys/types.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/streambuf:
 
@@ -691,10 +671,6 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/functional_hash.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hash_bytes.h:
 
-D:/quilldb/src/executor/Executor.cpp:
-
-c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hashtable_policy.h:
-
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/move.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/vector.tcc:
@@ -715,9 +691,9 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/postypes.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/ext/string_conversions.h:
 
-c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_algobase.h:
-
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/shared_ptr.h:
+
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_algobase.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/shared_ptr_base.h:
 
@@ -751,19 +727,21 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/streambuf.tcc:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/streambuf_iterator.h:
 
-c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/algorithm:
-
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/unordered_map:
+
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/algorithm:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stringfwd.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/unique_ptr.h:
 
-c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/unordered_map.h:
-
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/uses_allocator.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cctype:
+
+D:/quilldb/src/planner/Planner.h:
+
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/cerrno:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/clocale:
 
@@ -845,11 +823,25 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/stddef.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/stdint.h:
 
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hashtable_policy.h:
+
+D:/quilldb/src/executor/Executor.cpp:
+
+D:/quilldb/src/executor/Executor.h:
+
+D:/quilldb/src/planner/LogicalPlan.h:
+
+D:/quilldb/src/storage/Storage.h:
+
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/algorithmfwd.h:
+
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/hashtable.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_algo.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/uniform_int_dist.h:
+
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/unordered_map.h:
 
 D:/quilldb/src/lexer/Lexer.cpp:
 

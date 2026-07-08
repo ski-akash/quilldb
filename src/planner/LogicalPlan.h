@@ -42,6 +42,35 @@ public:
     }
 };
 
+// 5. AGGREGATE: Groups rows together and computes functions like SUM()
+class AggregateNode : public PlanNode {
+public:
+    std::shared_ptr<PlanNode> child; // The data source (e.g., a Scan or Filter)
+    std::vector<std::shared_ptr<Expression>> groupBys; // Columns to group by
+    std::vector<std::shared_ptr<Expression>> aggregates; // Functions to compute
+
+    AggregateNode(std::shared_ptr<PlanNode> childNode, 
+                  std::vector<std::shared_ptr<Expression>> gb,
+                  std::vector<std::shared_ptr<Expression>> agg)
+        : child(std::move(childNode)), groupBys(std::move(gb)), aggregates(std::move(agg)) {}
+
+    std::string toString() const override {
+        std::string gbStr = "";
+        for (size_t i = 0; i < groupBys.size(); ++i) {
+            gbStr += groupBys[i]->toString();
+            if (i < groupBys.size() - 1) gbStr += ", ";
+        }
+        
+        std::string aggStr = "";
+        for (size_t i = 0; i < aggregates.size(); ++i) {
+            aggStr += aggregates[i]->toString();
+            if (i < aggregates.size() - 1) aggStr += ", ";
+        }
+        
+        return "Aggregate(Groups: [" + gbStr + "], Aggs: [" + aggStr + "])\n  -> " + child->toString();
+    }
+};
+
 // 3. PROJECT: Selects specific columns
 class ProjectNode : public PlanNode {
 public:
