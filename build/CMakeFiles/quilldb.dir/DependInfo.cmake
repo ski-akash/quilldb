@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/quilldb/src/cli/main.cpp" "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj" "gcc" "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj.d"
   "D:/quilldb/src/lexer/Lexer.cpp" "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj" "gcc" "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj.d"
+  "D:/quilldb/src/parser/Parser.cpp" "CMakeFiles/quilldb.dir/src/parser/Parser.cpp.obj" "gcc" "CMakeFiles/quilldb.dir/src/parser/Parser.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

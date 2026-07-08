@@ -176,6 +176,30 @@ src/lexer/Lexer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.s
 .PHONY : src/lexer/Lexer.cpp.s
 
+src/parser/Parser.obj: src/parser/Parser.cpp.obj
+.PHONY : src/parser/Parser.obj
+
+# target to build an object file
+src/parser/Parser.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/parser/Parser.cpp.obj
+.PHONY : src/parser/Parser.cpp.obj
+
+src/parser/Parser.i: src/parser/Parser.cpp.i
+.PHONY : src/parser/Parser.i
+
+# target to preprocess a source file
+src/parser/Parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/parser/Parser.cpp.i
+.PHONY : src/parser/Parser.cpp.i
+
+src/parser/Parser.s: src/parser/Parser.cpp.s
+.PHONY : src/parser/Parser.s
+
+# target to generate assembly for a file
+src/parser/Parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/parser/Parser.cpp.s
+.PHONY : src/parser/Parser.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -191,6 +215,9 @@ help:
 	@echo ... src/lexer/Lexer.obj
 	@echo ... src/lexer/Lexer.i
 	@echo ... src/lexer/Lexer.s
+	@echo ... src/parser/Parser.obj
+	@echo ... src/parser/Parser.i
+	@echo ... src/parser/Parser.s
 .PHONY : help
 
 
