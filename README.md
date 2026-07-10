@@ -36,7 +36,7 @@ Each stage is a distinct module under `src/`, mirroring how production query eng
 
 ## Current status
 
-**Phase 1, 2 & 3 are implemented.** The optimizer performs predicate pushdown, automatic index selection (rewriting `Filter + SeqScan` into `IndexScan` when the catalog reports an index), and cost-based `NestedLoopJoin` vs. `HashJoin` selection. `EXPLAIN <query>` prints the plan before and after optimization. See the [Roadmap](#roadmap) below for what's still open beyond Phase 3.
+**Phase 1, 2 & 3 are implemented.** The optimizer performs predicate pushdown, automatic index selection (rewriting `Filter + SeqScan` into `IndexScan` when the catalog reports an index), and cost-based `NestedLoopJoin` vs. `HashJoin` selection. `EXPLAIN <query>` prints the plan before and after optimization.
 
 ### Supported SQL
 
@@ -78,7 +78,7 @@ cmake --build .
 ./quilldb               # Linux / macOS
 ```
 
-> The current `main.cpp` runs a fixed demo query (`EXPLAIN SELECT name FROM users WHERE id = 42;`) against a hardcoded in-memory table and prints the plan before and after optimization, so the index-selection rewrite is observable end-to-end without a REPL. An interactive REPL / file-based query input is on the [Beyond Phase 3](#beyond-phase-3) roadmap.
+> The current `main.cpp` runs a fixed demo query (`EXPLAIN SELECT name FROM users WHERE id = 42;`) against a hardcoded in-memory table and prints the plan before and after optimization, so the index-selection rewrite is observable end-to-end without a REPL.
 
 ## Benchmarks
 
