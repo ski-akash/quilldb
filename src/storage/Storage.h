@@ -1,47 +1,66 @@
 #pragma once
 
+#include "storage/Index.h" // NEW
 #include <string>
 #include <vector>
 #include <memory>
 #include <stdexcept>
+#include <unordered_map>
 
 namespace quill {
 
-// A single row of data (still used for inserting data easily)
 using Tuple = std::vector<std::string>;
 
-// A batch of columnar data (used by our vectorized executors)
 struct Chunk {
-    // Each element in the outer vector is a column.
-    // The inner vector contains the data for that column.
     std::vector<std::vector<std::string>> columns;
-    size_t size = 0; // Number of rows in this chunk
+    size_t size = 0;
 };
 
-// A Columnar in-memory table
 class Table {
 public:
     std::string name;
     std::vector<std::string> column_names;
-    
-    // NEW: Data is stored as columns, not rows!
-    // column_data_[0] contains all values for the first column.
     std::vector<std::vector<std::string>> column_data_;
     size_t num_rows_ = 0;
 
+    // NEW: A map of column names to their Indexes
+    std::unordered_map<std::string, std::shared_ptr<Index>> indexes_;
+
     Table(std::string n, std::vector<std::string> cols)
         : name(std::move(n)), column_names(std::move(cols)) {
-        // Initialize an empty vector for each column
         column_data_.resize(column_names.size());
     }
 
-    // We still accept a row for easy insertion, but we shred it into columns internally
+    // NEW: Allow users to create an index on a specific column
+    void createIndex(const std::string& colName) {
+        if (indexes_.find(colName) == indexes_.end()) {
+            indexes_[colName] = std::make_shared<Index>(colName);
+            
+            // Backfill the index with existing data
+            int colIdx = getColumnIndex(colName);
+            if (colIdx != -1) {
+                for (size_t r = 0; r < num_rows_; ++r) {
+                    indexes_[colName]->insert(column_data_[colIdx][r], r);
+                }
+            }
+        }
+    }
+
     void insert(const Tuple& row) {
         if (row.size() != column_names.size()) {
             throw std::runtime_error("Insert failed: Row size does not match column count.");
         }
+        
+        size_t new_row_id = num_rows_; // The index where this row will live
+
         for (size_t i = 0; i < row.size(); ++i) {
             column_data_[i].push_back(row[i]);
+            
+            // NEW: If this column has an index, update it!
+            auto it = indexes_.find(column_names[i]);
+            if (it != indexes_.end()) {
+                it->second->insert(row[i], new_row_id);
+            }
         }
         num_rows_++;
     }
