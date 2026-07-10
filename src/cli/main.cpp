@@ -1,61 +1,52 @@
 #include "lexer/Lexer.h"
 #include "parser/Parser.h"
 #include "planner/Planner.h"
-#include "executor/Executor.h"
-#include "storage/Storage.h"
+#include "optimizer/Optimizer.h"
 #include <iostream>
-#include <vector>
 
 int main() {
-    std::cout << "=== QuillDB Vectorized Aggregation Engine ===\n\n";
+    std::cout << "=== QuillDB EXPLAIN Command ===\n\n";
 
-    // 1. STORAGE: Create orders table with multiple orders per user
-    auto orders_table = std::make_shared<quill::Table>("orders", std::vector<std::string>{"order_id", "user_id", "amount"});
-    orders_table->insert({"A01", "42", "$50"});
-    orders_table->insert({"A02", "42", "$120"});  // Bob ordered twice! (Total: 170)
-    orders_table->insert({"A03", "100", "$999"}); // Charlie's massive order (Total: 999)
-    orders_table->insert({"A04", "100", "$1"});   // Charlie's tiny order (Total: 1000)
-    orders_table->insert({"A05", "1", "$25"});    // Alice's order (Total: 25)
-
-    // 2. FRONT-END: Lex & Parse
-    std::string sql = "SELECT user_id, SUM(amount) FROM orders GROUP BY user_id;"; 
-    std::cout << "Executing Query: " << sql << "\n\n";
+    // Notice the EXPLAIN keyword at the start!
+    std::string sql = "EXPLAIN SELECT name FROM users WHERE id = 42;"; 
+    std::cout << "Raw Query: " << sql << "\n\n";
     
     quill::Lexer lexer(sql);
     quill::Parser parser(std::move(lexer));
     auto statements = parser.parse();
-    auto selectStmt = std::dynamic_pointer_cast<quill::SelectStatement>(statements[0]);
 
-    // 3. BACK-END: Wire up the physical pipeline
-    auto scan = std::make_unique<quill::SeqScanExecutor>(orders_table);
+    if (statements.empty()) return 1;
+
+    // Check if it's an EXPLAIN statement
+    auto explainStmt = std::dynamic_pointer_cast<quill::ExplainStatement>(statements[0]);
+    std::shared_ptr<quill::Statement> targetStmt = explainStmt ? explainStmt->statement : statements[0];
+
+    // 1. Plan the query
+    quill::Planner planner;
+    auto logicalPlan = planner.createPlan(targetStmt);
+
+    // 2. Optimize the plan (Predicate Pushdown)
+    quill::Optimizer optimizer;
     
-    // Check if the query has aggregates
-    std::vector<std::shared_ptr<quill::Expression>> aggregates;
-    for (const auto& col : selectStmt->columns) {
-        if (std::dynamic_pointer_cast<quill::FunctionCall>(col)) {
-            aggregates.push_back(col);
-        }
-    }
-
-    // Run the Aggregate pipeline
-    auto aggregate = std::make_unique<quill::AggregateExecutor>(
-        std::move(scan), selectStmt->groupBy, aggregates, orders_table
+    // Artificially create a sub-optimal plan for our test (Filter -> Project -> Scan)
+    auto subOptimalPlan = std::make_shared<quill::FilterNode>(
+        logicalPlan, 
+        std::dynamic_pointer_cast<quill::SelectStatement>(targetStmt)->whereClause
     );
+    std::dynamic_pointer_cast<quill::ProjectNode>(logicalPlan)->child = 
+        std::dynamic_pointer_cast<quill::FilterNode>(std::dynamic_pointer_cast<quill::ProjectNode>(logicalPlan)->child)->child;
 
-    // 4. EXECUTE!
-    std::cout << "RESULTS (User ID | Total Spend):\n";
-    std::cout << "--------------------------\n";
-    
-    aggregate->init();
-    
-    quill::Chunk chunk;
-    while (aggregate->next(chunk)) {
-        for (size_t row_idx = 0; row_idx < chunk.size; ++row_idx) {
-            std::cout << chunk.columns[0][row_idx] << "\t\t | " << chunk.columns[1][row_idx] << "\n";
-        }
+    auto optimizedPlan = optimizer.optimize(subOptimalPlan);
+
+    // 3. If EXPLAIN, print the optimized plan and halt execution!
+    if (explainStmt) {
+        std::cout << "--- OPTIMIZED EXECUTION PLAN ---\n";
+        std::cout << optimizedPlan->toString() << "\n\n";
+        std::cout << "(Execution skipped due to EXPLAIN keyword)\n";
+        return 0; 
     }
-    
-    std::cout << "--------------------------\n";
+
+    // (If not EXPLAIN, physical execution would happen here...)
 
     return 0;
 }

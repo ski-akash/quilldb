@@ -25,6 +25,7 @@ enum class TokenType {
     ON,
     GROUP,
     BY,
+    EXPLAIN,
 
     // Syntax
     COMMA,      // ,

@@ -45,9 +45,25 @@ std::vector<std::shared_ptr<Statement>> Parser::parse() {
 }
 
 std::shared_ptr<Statement> Parser::parseStatement() {
+    if (current_token_.type == TokenType::EXPLAIN) {
+        return parseExplainStatement();
+    }
     if (current_token_.type == TokenType::SELECT) {
         return parseSelectStatement();
     }
+    return nullptr;
+}
+
+// NEW: Parses EXPLAIN followed by a SELECT
+std::shared_ptr<Statement> Parser::parseExplainStatement() {
+    nextToken(); // Move past 'EXPLAIN'
+
+    // In Phase 3, we assume EXPLAIN is always followed by a SELECT query
+    if (current_token_.type == TokenType::SELECT) {
+        auto stmt = parseSelectStatement();
+        return std::make_shared<ExplainStatement>(std::move(stmt));
+    }
+    
     return nullptr;
 }
 

@@ -35,6 +35,8 @@ private:
 
     // NEW: Determines if a token is a standard column or a function call
     std::shared_ptr<Expression> parseColumnOrFunction();
+
+    std::shared_ptr<Statement> parseExplainStatement(); // NEW
     
     // Helper methods to check token types safely
     bool currentTokenIs(TokenType type) const;

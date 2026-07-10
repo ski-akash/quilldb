@@ -200,6 +200,30 @@ src/lexer/Lexer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.s
 .PHONY : src/lexer/Lexer.cpp.s
 
+src/optimizer/Optimizer.obj: src/optimizer/Optimizer.cpp.obj
+.PHONY : src/optimizer/Optimizer.obj
+
+# target to build an object file
+src/optimizer/Optimizer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/optimizer/Optimizer.cpp.obj
+.PHONY : src/optimizer/Optimizer.cpp.obj
+
+src/optimizer/Optimizer.i: src/optimizer/Optimizer.cpp.i
+.PHONY : src/optimizer/Optimizer.i
+
+# target to preprocess a source file
+src/optimizer/Optimizer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/optimizer/Optimizer.cpp.i
+.PHONY : src/optimizer/Optimizer.cpp.i
+
+src/optimizer/Optimizer.s: src/optimizer/Optimizer.cpp.s
+.PHONY : src/optimizer/Optimizer.s
+
+# target to generate assembly for a file
+src/optimizer/Optimizer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/optimizer/Optimizer.cpp.s
+.PHONY : src/optimizer/Optimizer.cpp.s
+
 src/parser/Parser.obj: src/parser/Parser.cpp.obj
 .PHONY : src/parser/Parser.obj
 
@@ -266,6 +290,9 @@ help:
 	@echo ... src/lexer/Lexer.obj
 	@echo ... src/lexer/Lexer.i
 	@echo ... src/lexer/Lexer.s
+	@echo ... src/optimizer/Optimizer.obj
+	@echo ... src/optimizer/Optimizer.i
+	@echo ... src/optimizer/Optimizer.s
 	@echo ... src/parser/Parser.obj
 	@echo ... src/parser/Parser.i
 	@echo ... src/parser/Parser.s

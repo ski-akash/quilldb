@@ -145,4 +145,16 @@ public:
     }
 };
 
+// NEW: Represents an EXPLAIN query
+class ExplainStatement : public Statement {
+public:
+    std::shared_ptr<Statement> statement; // The query being explained (e.g., SELECT)
+
+    explicit ExplainStatement(std::shared_ptr<Statement> stmt) : statement(std::move(stmt)) {}
+
+    std::string toString() const override {
+        return "EXPLAIN:\n  " + statement->toString();
+    }
+};
+
 }
