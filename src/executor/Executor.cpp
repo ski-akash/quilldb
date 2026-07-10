@@ -369,4 +369,43 @@ bool AggregateExecutor::next(Chunk& out_chunk) {
     return true;
 }
 
+// ---------------------------------------------------------
+// 7. INDEX SCAN (Vectorized)
+// ---------------------------------------------------------
+IndexScanExecutor::IndexScanExecutor(std::shared_ptr<Table> table, std::string col, std::string key)
+    : table_(std::move(table)), column_name_(std::move(col)), lookup_key_(std::move(key)) {}
+
+void IndexScanExecutor::init() {
+    current_idx_ = 0;
+    matched_row_ids_.clear();
+
+    // Look up the exact row numbers from the Hash Index!
+    auto it = table_->indexes_.find(column_name_);
+    if (it != table_->indexes_.end()) {
+        matched_row_ids_ = it->second->lookup(lookup_key_);
+    }
+}
+
+bool IndexScanExecutor::next(Chunk& out_chunk) {
+    // If we fetched all matching rows, we are done
+    if (current_idx_ >= matched_row_ids_.size()) return false;
+
+    size_t rows_to_fetch = std::min(BATCH_SIZE, matched_row_ids_.size() - current_idx_);
+
+    out_chunk.columns.resize(table_->column_names.size());
+    for (auto& col : out_chunk.columns) col.clear();
+    out_chunk.size = rows_to_fetch;
+
+    // Bulk copy ONLY the specific rows that the index told us about
+    for (size_t col_idx = 0; col_idx < table_->column_names.size(); ++col_idx) {
+        for (size_t i = 0; i < rows_to_fetch; ++i) {
+            size_t actual_row_id = matched_row_ids_[current_idx_ + i];
+            out_chunk.columns[col_idx].push_back(table_->column_data_[col_idx][actual_row_id]);
+        }
+    }
+
+    current_idx_ += rows_to_fetch;
+    return true;
+}
+
 } // namespace quill

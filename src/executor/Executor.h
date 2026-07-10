@@ -32,6 +32,24 @@ private:
     size_t current_row_ = 0;
 };
 
+// 7. INDEX SCAN (Vectorized)
+class IndexScanExecutor : public Executor {
+public:
+    IndexScanExecutor(std::shared_ptr<Table> table, std::string column_name, std::string lookup_key);
+    
+    void init() override;
+    bool next(Chunk& out_chunk) override;
+
+private:
+    std::shared_ptr<Table> table_;
+    std::string column_name_;
+    std::string lookup_key_;
+    
+    // We will store the exact row numbers we need to fetch here
+    std::vector<size_t> matched_row_ids_; 
+    size_t current_idx_ = 0;
+};
+
 class FilterExecutor : public Executor {
 public:
     FilterExecutor(std::unique_ptr<Executor> child, 

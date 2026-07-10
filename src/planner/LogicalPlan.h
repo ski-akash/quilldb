@@ -28,6 +28,21 @@ public:
     }
 };
 
+// 1b. INDEX SCAN: Reads specific rows using an O(1) Hash Index
+class IndexScanNode : public PlanNode {
+public:
+    std::string tableName;
+    std::string columnName;
+    std::string lookupKey; // E.g., "42"
+
+    IndexScanNode(std::string table, std::string col, std::string key)
+        : tableName(std::move(table)), columnName(std::move(col)), lookupKey(std::move(key)) {}
+
+    std::string toString() const override {
+        return "IndexScan(table: " + tableName + ", index: " + columnName + " = " + lookupKey + ")";
+    }
+};
+
 // 2. FILTER: Applies a WHERE clause
 class FilterNode : public PlanNode {
 public:

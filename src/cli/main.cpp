@@ -6,15 +6,17 @@
 #include <iostream>
 
 int main() {
-    std::cout << "=== QuillDB CBO (Cost-Based Optimizer) Test ===\n\n";
+    std::cout << "=== QuillDB Automated Index Selection Test ===\n\n";
 
-    // 1. Initialize Catalog with Statistics
+    // 1. Initialize Catalog with Statistics and Indexes
     auto catalog = std::make_shared<quill::Catalog>();
-    catalog->setTableRowCount("users", 100);
-    catalog->setTableRowCount("orders", 50000); // Massive table!
+    catalog->setTableRowCount("users", 1000000); // 1 Million rows
+    
+    // Register our index in the Catalog!
+    catalog->addIndex("users", "id"); 
 
     // 2. Front-End: Lex & Parse
-    std::string sql = "EXPLAIN SELECT name, amount FROM users JOIN orders ON users.id = orders.user_id;"; 
+    std::string sql = "EXPLAIN SELECT name FROM users WHERE id = 42;"; 
     std::cout << "Raw Query: " << sql << "\n\n";
     
     quill::Lexer lexer(sql);
@@ -24,17 +26,19 @@ int main() {
     auto explainStmt = std::dynamic_pointer_cast<quill::ExplainStatement>(statements[0]);
     std::shared_ptr<quill::Statement> targetStmt = explainStmt ? explainStmt->statement : statements[0];
 
-    // 3. Planner
+    // 3. Planner (Generates a naive Filter -> SeqScan plan)
     quill::Planner planner;
     auto logicalPlan = planner.createPlan(targetStmt);
 
-    // 4. Optimizer (Now injected with the Catalog!)
+    std::cout << "--- BEFORE OPTIMIZATION (Naive Plan) ---\n";
+    std::cout << logicalPlan->toString() << "\n\n";
+
+    // 4. Optimizer (Should automatically rewrite it to an IndexScan)
     quill::Optimizer optimizer(catalog);
     auto optimizedPlan = optimizer.optimize(logicalPlan);
 
-    // 5. Output
     if (explainStmt) {
-        std::cout << "--- CBO EXPLAIN PLAN ---\n";
+        std::cout << "--- AFTER OPTIMIZATION (Index Selection) ---\n";
         std::cout << optimizedPlan->toString() << "\n\n";
     }
 

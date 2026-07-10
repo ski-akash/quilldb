@@ -4,7 +4,8 @@ namespace quill {
 
 std::shared_ptr<PlanNode> Optimizer::optimize(std::shared_ptr<PlanNode> plan) {
     plan = applyPredicatePushdown(plan);
-    plan = applyCostBasedJoinSelection(plan); // Apply CBO!
+    plan = applyCostBasedJoinSelection(plan);
+    plan = applyIndexSelection(plan); // NEW
     return plan;
 }
 
@@ -91,6 +92,56 @@ std::shared_ptr<PlanNode> Optimizer::applyCostBasedJoinSelection(std::shared_ptr
                 joinNode->predicate, 
                 hash_join_cost
             );
+        }
+    }
+
+    return plan;
+}
+
+std::shared_ptr<PlanNode> Optimizer::applyIndexSelection(std::shared_ptr<PlanNode> plan) {
+    if (!plan) return nullptr;
+
+    // Traverse the tree recursively
+    if (auto projectNode = std::dynamic_pointer_cast<ProjectNode>(plan)) {
+        projectNode->child = applyIndexSelection(projectNode->child);
+    } else if (auto aggNode = std::dynamic_pointer_cast<AggregateNode>(plan)) {
+        aggNode->child = applyIndexSelection(aggNode->child);
+    } else if (auto joinNode = std::dynamic_pointer_cast<NestedLoopJoinNode>(plan)) {
+        joinNode->left_child = applyIndexSelection(joinNode->left_child);
+        joinNode->right_child = applyIndexSelection(joinNode->right_child);
+    } else if (auto hashJoinNode = std::dynamic_pointer_cast<HashJoinNode>(plan)) {
+        hashJoinNode->left_child = applyIndexSelection(hashJoinNode->left_child);
+        hashJoinNode->right_child = applyIndexSelection(hashJoinNode->right_child);
+    } 
+    // THE RULE: If we find a Filter...
+    else if (auto filterNode = std::dynamic_pointer_cast<FilterNode>(plan)) {
+        filterNode->child = applyIndexSelection(filterNode->child);
+
+        // ... sitting directly on top of a SeqScan ...
+        if (auto scanNode = std::dynamic_pointer_cast<SeqScanNode>(filterNode->child)) {
+            
+            // ... check if it's a basic equality condition (e.g., id = 42)
+            if (auto binaryExpr = std::dynamic_pointer_cast<BinaryExpression>(filterNode->predicate)) {
+                if (binaryExpr->op == "=") {
+                    auto leftIdent = std::dynamic_pointer_cast<Identifier>(binaryExpr->left);
+                    auto rightLiteral = std::dynamic_pointer_cast<NumberLiteral>(binaryExpr->right);
+
+                    if (leftIdent && rightLiteral) {
+                        std::string colName = leftIdent->value;
+                        if (colName.find('.') != std::string::npos) {
+                            colName = colName.substr(colName.find('.') + 1); // Strip "users." prefix
+                        }
+
+                        // THE MAGIC: Ask the catalog if this column has an index!
+                        if (catalog_->hasIndex(scanNode->tableName, colName)) {
+                            // YES! Rewrite the tree: Replace Filter+SeqScan with IndexScan
+                            return std::make_shared<IndexScanNode>(
+                                scanNode->tableName, colName, rightLiteral->value
+                            );
+                        }
+                    }
+                }
+            }
         }
     }
 

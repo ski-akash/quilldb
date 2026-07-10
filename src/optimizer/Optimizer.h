@@ -17,7 +17,10 @@ private:
     std::shared_ptr<Catalog> catalog_;
 
     std::shared_ptr<PlanNode> applyPredicatePushdown(std::shared_ptr<PlanNode> plan);
-    std::shared_ptr<PlanNode> applyCostBasedJoinSelection(std::shared_ptr<PlanNode> plan); // NEW
+    std::shared_ptr<PlanNode> applyCostBasedJoinSelection(std::shared_ptr<PlanNode> plan);
+
+    // NEW: Replaces Filter + SeqScan with IndexScan if an index exists
+    std::shared_ptr<PlanNode> applyIndexSelection(std::shared_ptr<PlanNode> plan);
 };
 
 } // namespace quill

@@ -106,4 +106,6 @@ CMakeFiles/quilldb.dir/src/optimizer/Optimizer.cpp.obj: \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\unordered_map \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\hashtable.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\hashtable_policy.h \
- c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\unordered_map.h
+ c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\unordered_map.h \
+ c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\unordered_set \
+ c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\unordered_set.h
