@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.obj"
+  "CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.obj.d"
   "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj"
   "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj.d"
   "CMakeFiles/quilldb.dir/src/executor/Executor.cpp.obj"

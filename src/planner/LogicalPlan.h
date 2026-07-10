@@ -107,4 +107,24 @@ public:
     }
 };
 
+// 4b. HASH JOIN: Optimized join for large datasets
+class HashJoinNode : public PlanNode {
+public:
+    std::shared_ptr<PlanNode> left_child;
+    std::shared_ptr<PlanNode> right_child;
+    std::shared_ptr<Expression> predicate;
+    size_t estimated_cost; // NEW: The optimizer will stamp the cost here!
+
+    HashJoinNode(std::shared_ptr<PlanNode> left, 
+                 std::shared_ptr<PlanNode> right, 
+                 std::shared_ptr<Expression> pred,
+                 size_t cost)
+        : left_child(std::move(left)), right_child(std::move(right)), 
+          predicate(std::move(pred)), estimated_cost(cost) {}
+
+    std::string toString() const override {
+        return "HashJoin(ON " + predicate->toString() + ") [Cost: " + std::to_string(estimated_cost) + "]\n  -> Left: " + left_child->toString() + "\n  -> Right: " + right_child->toString();
+    }
+};
+
 } // namespace quill

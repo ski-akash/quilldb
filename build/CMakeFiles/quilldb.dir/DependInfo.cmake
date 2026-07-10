@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "D:/quilldb/src/catalog/Catalog.cpp" "CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.obj" "gcc" "CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.obj.d"
   "D:/quilldb/src/cli/main.cpp" "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj" "gcc" "CMakeFiles/quilldb.dir/src/cli/main.cpp.obj.d"
   "D:/quilldb/src/executor/Executor.cpp" "CMakeFiles/quilldb.dir/src/executor/Executor.cpp.obj" "gcc" "CMakeFiles/quilldb.dir/src/executor/Executor.cpp.obj.d"
   "D:/quilldb/src/lexer/Lexer.cpp" "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj" "gcc" "CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj.d"

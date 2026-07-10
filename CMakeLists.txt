@@ -17,6 +17,7 @@ set(SOURCES
     src/planner/Planner.cpp
     src/executor/Executor.cpp
     src/optimizer/Optimizer.cpp
+    src/catalog/Catalog.cpp
 )
 
 # Create the executable

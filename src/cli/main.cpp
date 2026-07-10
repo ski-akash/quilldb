@@ -2,51 +2,41 @@
 #include "parser/Parser.h"
 #include "planner/Planner.h"
 #include "optimizer/Optimizer.h"
+#include "catalog/Catalog.h"
 #include <iostream>
 
 int main() {
-    std::cout << "=== QuillDB EXPLAIN Command ===\n\n";
+    std::cout << "=== QuillDB CBO (Cost-Based Optimizer) Test ===\n\n";
 
-    // Notice the EXPLAIN keyword at the start!
-    std::string sql = "EXPLAIN SELECT name FROM users WHERE id = 42;"; 
+    // 1. Initialize Catalog with Statistics
+    auto catalog = std::make_shared<quill::Catalog>();
+    catalog->setTableRowCount("users", 100);
+    catalog->setTableRowCount("orders", 50000); // Massive table!
+
+    // 2. Front-End: Lex & Parse
+    std::string sql = "EXPLAIN SELECT name, amount FROM users JOIN orders ON users.id = orders.user_id;"; 
     std::cout << "Raw Query: " << sql << "\n\n";
     
     quill::Lexer lexer(sql);
     quill::Parser parser(std::move(lexer));
     auto statements = parser.parse();
 
-    if (statements.empty()) return 1;
-
-    // Check if it's an EXPLAIN statement
     auto explainStmt = std::dynamic_pointer_cast<quill::ExplainStatement>(statements[0]);
     std::shared_ptr<quill::Statement> targetStmt = explainStmt ? explainStmt->statement : statements[0];
 
-    // 1. Plan the query
+    // 3. Planner
     quill::Planner planner;
     auto logicalPlan = planner.createPlan(targetStmt);
 
-    // 2. Optimize the plan (Predicate Pushdown)
-    quill::Optimizer optimizer;
-    
-    // Artificially create a sub-optimal plan for our test (Filter -> Project -> Scan)
-    auto subOptimalPlan = std::make_shared<quill::FilterNode>(
-        logicalPlan, 
-        std::dynamic_pointer_cast<quill::SelectStatement>(targetStmt)->whereClause
-    );
-    std::dynamic_pointer_cast<quill::ProjectNode>(logicalPlan)->child = 
-        std::dynamic_pointer_cast<quill::FilterNode>(std::dynamic_pointer_cast<quill::ProjectNode>(logicalPlan)->child)->child;
+    // 4. Optimizer (Now injected with the Catalog!)
+    quill::Optimizer optimizer(catalog);
+    auto optimizedPlan = optimizer.optimize(logicalPlan);
 
-    auto optimizedPlan = optimizer.optimize(subOptimalPlan);
-
-    // 3. If EXPLAIN, print the optimized plan and halt execution!
+    // 5. Output
     if (explainStmt) {
-        std::cout << "--- OPTIMIZED EXECUTION PLAN ---\n";
+        std::cout << "--- CBO EXPLAIN PLAN ---\n";
         std::cout << optimizedPlan->toString() << "\n\n";
-        std::cout << "(Execution skipped due to EXPLAIN keyword)\n";
-        return 0; 
     }
-
-    // (If not EXPLAIN, physical execution would happen here...)
 
     return 0;
 }

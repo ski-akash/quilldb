@@ -128,6 +128,30 @@ quilldb/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/build
 .PHONY : quilldb/fast
 
+src/catalog/Catalog.obj: src/catalog/Catalog.cpp.obj
+.PHONY : src/catalog/Catalog.obj
+
+# target to build an object file
+src/catalog/Catalog.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.obj
+.PHONY : src/catalog/Catalog.cpp.obj
+
+src/catalog/Catalog.i: src/catalog/Catalog.cpp.i
+.PHONY : src/catalog/Catalog.i
+
+# target to preprocess a source file
+src/catalog/Catalog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.i
+.PHONY : src/catalog/Catalog.cpp.i
+
+src/catalog/Catalog.s: src/catalog/Catalog.cpp.s
+.PHONY : src/catalog/Catalog.s
+
+# target to generate assembly for a file
+src/catalog/Catalog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.s
+.PHONY : src/catalog/Catalog.cpp.s
+
 src/cli/main.obj: src/cli/main.cpp.obj
 .PHONY : src/cli/main.obj
 
@@ -281,6 +305,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... quilldb
+	@echo ... src/catalog/Catalog.obj
+	@echo ... src/catalog/Catalog.i
+	@echo ... src/catalog/Catalog.s
 	@echo ... src/cli/main.obj
 	@echo ... src/cli/main.i
 	@echo ... src/cli/main.s
