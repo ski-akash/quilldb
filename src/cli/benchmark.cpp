@@ -8,7 +8,7 @@
 #include <chrono>
 #include <vector>
 
-const int64_t dim = 1000000000;
+const int64_t dim = 1000000;
 
 // Helper function to execute a physical plan
 void executePlan(std::unique_ptr<quill::Executor> executor) {
@@ -27,14 +27,14 @@ int main() {
     auto catalog = std::make_shared<quill::Catalog>();
     auto users_table = std::make_shared<quill::Table>("users", std::vector<std::string>{"id", "name"});
 
-    std::cout << "Inserting 1,000,000,000 rows into in-memory columnar store...\n";
+    std::cout << "Inserting 1,000,000 rows into in-memory columnar store...\n";
     for (int i = 0; i < dim; ++i) {
         users_table->insert({std::to_string(i), "User_" + std::to_string(i)});
     }
     catalog->setTableRowCount("users", dim);
     std::cout << "Data loaded.\n\n";
 
-    std::string sql = "SELECT name FROM users WHERE id = 999999999;"; 
+    std::string sql = "SELECT name FROM users WHERE id = 999999;"; 
     quill::Lexer lexer(sql);
     quill::Parser parser(std::move(lexer));
     auto targetStmt = parser.parse()[0];
@@ -76,7 +76,7 @@ int main() {
     quill::Optimizer smartOptimizer(catalog);
     auto smartPlan = smartOptimizer.optimize(logicalPlan); // Optimizer automatically chooses IndexScan
     
-    auto index_scan = std::make_unique<quill::IndexScanExecutor>(users_table, "id", "999999999");
+    auto index_scan = std::make_unique<quill::IndexScanExecutor>(users_table, "id", "999999");
 
     start_time = std::chrono::high_resolution_clock::now();
     executePlan(std::move(index_scan));
