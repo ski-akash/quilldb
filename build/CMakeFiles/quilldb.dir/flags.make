@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = @CMakeFiles\quilldb.dir\includes_CXX.rsp
 
-CXX_FLAGS = -std=c++1z -Wall -Wextra -Wpedantic
+CXX_FLAGS = -std=gnu++1z
 

@@ -128,12 +128,26 @@ quilldb/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/build
 .PHONY : quilldb/fast
 
+#=============================================================================
+# Target rules for targets named quilldb_benchmark
+
+# Build rule for target.
+quilldb_benchmark: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 quilldb_benchmark
+.PHONY : quilldb_benchmark
+
+# fast build rule for target.
+quilldb_benchmark/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/build
+.PHONY : quilldb_benchmark/fast
+
 src/catalog/Catalog.obj: src/catalog/Catalog.cpp.obj
 .PHONY : src/catalog/Catalog.obj
 
 # target to build an object file
 src/catalog/Catalog.cpp.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/catalog/Catalog.cpp.obj
 .PHONY : src/catalog/Catalog.cpp.obj
 
 src/catalog/Catalog.i: src/catalog/Catalog.cpp.i
@@ -142,6 +156,7 @@ src/catalog/Catalog.i: src/catalog/Catalog.cpp.i
 # target to preprocess a source file
 src/catalog/Catalog.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/catalog/Catalog.cpp.i
 .PHONY : src/catalog/Catalog.cpp.i
 
 src/catalog/Catalog.s: src/catalog/Catalog.cpp.s
@@ -150,7 +165,32 @@ src/catalog/Catalog.s: src/catalog/Catalog.cpp.s
 # target to generate assembly for a file
 src/catalog/Catalog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/catalog/Catalog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/catalog/Catalog.cpp.s
 .PHONY : src/catalog/Catalog.cpp.s
+
+src/cli/benchmark.obj: src/cli/benchmark.cpp.obj
+.PHONY : src/cli/benchmark.obj
+
+# target to build an object file
+src/cli/benchmark.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/cli/benchmark.cpp.obj
+.PHONY : src/cli/benchmark.cpp.obj
+
+src/cli/benchmark.i: src/cli/benchmark.cpp.i
+.PHONY : src/cli/benchmark.i
+
+# target to preprocess a source file
+src/cli/benchmark.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/cli/benchmark.cpp.i
+.PHONY : src/cli/benchmark.cpp.i
+
+src/cli/benchmark.s: src/cli/benchmark.cpp.s
+.PHONY : src/cli/benchmark.s
+
+# target to generate assembly for a file
+src/cli/benchmark.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/cli/benchmark.cpp.s
+.PHONY : src/cli/benchmark.cpp.s
 
 src/cli/main.obj: src/cli/main.cpp.obj
 .PHONY : src/cli/main.obj
@@ -182,6 +222,7 @@ src/executor/Executor.obj: src/executor/Executor.cpp.obj
 # target to build an object file
 src/executor/Executor.cpp.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/executor/Executor.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/executor/Executor.cpp.obj
 .PHONY : src/executor/Executor.cpp.obj
 
 src/executor/Executor.i: src/executor/Executor.cpp.i
@@ -190,6 +231,7 @@ src/executor/Executor.i: src/executor/Executor.cpp.i
 # target to preprocess a source file
 src/executor/Executor.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/executor/Executor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/executor/Executor.cpp.i
 .PHONY : src/executor/Executor.cpp.i
 
 src/executor/Executor.s: src/executor/Executor.cpp.s
@@ -198,6 +240,7 @@ src/executor/Executor.s: src/executor/Executor.cpp.s
 # target to generate assembly for a file
 src/executor/Executor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/executor/Executor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/executor/Executor.cpp.s
 .PHONY : src/executor/Executor.cpp.s
 
 src/lexer/Lexer.obj: src/lexer/Lexer.cpp.obj
@@ -206,6 +249,7 @@ src/lexer/Lexer.obj: src/lexer/Lexer.cpp.obj
 # target to build an object file
 src/lexer/Lexer.cpp.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/lexer/Lexer.cpp.obj
 .PHONY : src/lexer/Lexer.cpp.obj
 
 src/lexer/Lexer.i: src/lexer/Lexer.cpp.i
@@ -214,6 +258,7 @@ src/lexer/Lexer.i: src/lexer/Lexer.cpp.i
 # target to preprocess a source file
 src/lexer/Lexer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/lexer/Lexer.cpp.i
 .PHONY : src/lexer/Lexer.cpp.i
 
 src/lexer/Lexer.s: src/lexer/Lexer.cpp.s
@@ -222,6 +267,7 @@ src/lexer/Lexer.s: src/lexer/Lexer.cpp.s
 # target to generate assembly for a file
 src/lexer/Lexer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/lexer/Lexer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/lexer/Lexer.cpp.s
 .PHONY : src/lexer/Lexer.cpp.s
 
 src/optimizer/Optimizer.obj: src/optimizer/Optimizer.cpp.obj
@@ -230,6 +276,7 @@ src/optimizer/Optimizer.obj: src/optimizer/Optimizer.cpp.obj
 # target to build an object file
 src/optimizer/Optimizer.cpp.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/optimizer/Optimizer.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/optimizer/Optimizer.cpp.obj
 .PHONY : src/optimizer/Optimizer.cpp.obj
 
 src/optimizer/Optimizer.i: src/optimizer/Optimizer.cpp.i
@@ -238,6 +285,7 @@ src/optimizer/Optimizer.i: src/optimizer/Optimizer.cpp.i
 # target to preprocess a source file
 src/optimizer/Optimizer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/optimizer/Optimizer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/optimizer/Optimizer.cpp.i
 .PHONY : src/optimizer/Optimizer.cpp.i
 
 src/optimizer/Optimizer.s: src/optimizer/Optimizer.cpp.s
@@ -246,6 +294,7 @@ src/optimizer/Optimizer.s: src/optimizer/Optimizer.cpp.s
 # target to generate assembly for a file
 src/optimizer/Optimizer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/optimizer/Optimizer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/optimizer/Optimizer.cpp.s
 .PHONY : src/optimizer/Optimizer.cpp.s
 
 src/parser/Parser.obj: src/parser/Parser.cpp.obj
@@ -254,6 +303,7 @@ src/parser/Parser.obj: src/parser/Parser.cpp.obj
 # target to build an object file
 src/parser/Parser.cpp.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/parser/Parser.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/parser/Parser.cpp.obj
 .PHONY : src/parser/Parser.cpp.obj
 
 src/parser/Parser.i: src/parser/Parser.cpp.i
@@ -262,6 +312,7 @@ src/parser/Parser.i: src/parser/Parser.cpp.i
 # target to preprocess a source file
 src/parser/Parser.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/parser/Parser.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/parser/Parser.cpp.i
 .PHONY : src/parser/Parser.cpp.i
 
 src/parser/Parser.s: src/parser/Parser.cpp.s
@@ -270,6 +321,7 @@ src/parser/Parser.s: src/parser/Parser.cpp.s
 # target to generate assembly for a file
 src/parser/Parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/parser/Parser.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/parser/Parser.cpp.s
 .PHONY : src/parser/Parser.cpp.s
 
 src/planner/Planner.obj: src/planner/Planner.cpp.obj
@@ -278,6 +330,7 @@ src/planner/Planner.obj: src/planner/Planner.cpp.obj
 # target to build an object file
 src/planner/Planner.cpp.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/planner/Planner.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/planner/Planner.cpp.obj
 .PHONY : src/planner/Planner.cpp.obj
 
 src/planner/Planner.i: src/planner/Planner.cpp.i
@@ -286,6 +339,7 @@ src/planner/Planner.i: src/planner/Planner.cpp.i
 # target to preprocess a source file
 src/planner/Planner.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/planner/Planner.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/planner/Planner.cpp.i
 .PHONY : src/planner/Planner.cpp.i
 
 src/planner/Planner.s: src/planner/Planner.cpp.s
@@ -294,6 +348,7 @@ src/planner/Planner.s: src/planner/Planner.cpp.s
 # target to generate assembly for a file
 src/planner/Planner.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb.dir\build.make CMakeFiles/quilldb.dir/src/planner/Planner.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\quilldb_benchmark.dir\build.make CMakeFiles/quilldb_benchmark.dir/src/planner/Planner.cpp.s
 .PHONY : src/planner/Planner.cpp.s
 
 # Help Target
@@ -305,9 +360,13 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... quilldb
+	@echo ... quilldb_benchmark
 	@echo ... src/catalog/Catalog.obj
 	@echo ... src/catalog/Catalog.i
 	@echo ... src/catalog/Catalog.s
+	@echo ... src/cli/benchmark.obj
+	@echo ... src/cli/benchmark.i
+	@echo ... src/cli/benchmark.s
 	@echo ... src/cli/main.obj
 	@echo ... src/cli/main.i
 	@echo ... src/cli/main.s

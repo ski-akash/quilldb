@@ -1,17 +1,11 @@
-cmake_minimum_required(VERSION 3.14)
-project(QuillDB VERSION 0.1.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.10)
+project(QuillDB)
 
-# Require C++17 standard
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Add compiler warnings to keep our code clean
-add_compile_options(-Wall -Wextra -Wpedantic)
-
-# Define the source files (we will add to this as we build)
-set(SOURCES
-    src/cli/main.cpp
+# Core source files (everything EXCEPT main.cpp and benchmark.cpp)
+set(CORE_SOURCES
     src/lexer/Lexer.cpp
     src/parser/Parser.cpp
     src/planner/Planner.cpp
@@ -20,8 +14,10 @@ set(SOURCES
     src/catalog/Catalog.cpp
 )
 
-# Create the executable
-add_executable(quilldb ${SOURCES})
+include_directories(src)
 
-# Include the src directory so we can use clean #include paths
-target_include_directories(quilldb PRIVATE src)
+# Executable 1: The standard CLI
+add_executable(quilldb src/cli/main.cpp ${CORE_SOURCES})
+
+# Executable 2: The Benchmark runner
+add_executable(quilldb_benchmark src/cli/benchmark.cpp ${CORE_SOURCES})

@@ -1,3 +1,4 @@
 D:/quilldb/build/CMakeFiles/quilldb.dir
+D:/quilldb/build/CMakeFiles/quilldb_benchmark.dir
 D:/quilldb/build/CMakeFiles/edit_cache.dir
 D:/quilldb/build/CMakeFiles/rebuild_cache.dir
